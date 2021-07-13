@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubelet-exporter
+spec:
+  selector:
+    matchLabels:
+      name: kubelet-exporter
+  template:
+    metadata:
+      labels:
+        name: kubelet-exporter
+    spec:
+      containers:
+      - name: kubelet-exporter
+        image: python:3.9-slim # Change to your image
+        # Dummy command and args for testing 
+        command: ['/bin/sh']
+        args: ['-c','while true; do echo hello; sleep 60;done']
+        ports:
+        - containerPort: 9118
+        resources:
+          limits:
+            cpu: 50m
+            memory: 50Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi
+        env:
+        - name: NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      serviceAccountName: kubelet-exporter  
