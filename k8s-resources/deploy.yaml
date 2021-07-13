@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubelet-exporter
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: kubelet-exporter
+  template:
+    metadata:
+      labels:
+        name: kubelet-exporter
+    spec:
+      containers:
+      - name: kubelet-exporter
+        image: python:3.9-slim # Change to your image
+        # Dummy command and args for testing 
+        command: ['/bin/sh']
+        args: ['-c','while true; do echo hello; sleep 60;done']
+        ports:
+        - containerPort: 9118
+        resources:
+          limits:
+            cpu: 50m
+            memory: 150Mi
+          requests:
+            cpu: 10m
+            memory: 50Mi
+      serviceAccountName: kubelet-exporter  

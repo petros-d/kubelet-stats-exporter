@@ -15,12 +15,10 @@ rules:
   resources:
   - nodes/metrics
   - nodes/stats
+  - nodes # Required when running as a Deployment, to query API for list of nodes
   verbs:
   - get
-- nonResourceURLs:
-  - /metrics
-  verbs:
-  - get
+  - list # Required when running as Deployment
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
