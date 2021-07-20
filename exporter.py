@@ -19,7 +19,7 @@ class KubeletCollector(object):
     def collect(self):
         nodes = K8S.list_node()
         metric = GaugeMetricFamily(
-            'kubernetes_pod_ephemeral_storage_used_bytes',
+            'kube_pod_ephemeral_storage_used_bytes',
             'Kubernetes Pod ephemeral storage used in bytes',
             labels=['node','namespace','pod'])
         for node in nodes.items:
