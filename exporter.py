@@ -3,15 +3,17 @@ import requests
 from prometheus_client import start_http_server
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 from kubernetes import client, config 
+import logging
+logging.basicConfig(format='%(asctime)s -  %(levelname)s - %(message)s')
 
 config.load_incluster_config()
 K8S = client.CoreV1Api()
-
+CA_FILE = '/run/secrets/kubernetes.io/serviceaccount/ca.crt'
 
 with open('/run/secrets/kubernetes.io/serviceaccount/token', 'r') as file:
         K8S_TOKEN = file.read()
 
-AUTH_HEADERS = { 'Authorization': 'Bearer'+ str(K8S_TOKEN) }
+AUTH_HEADERS = { 'Authorization': 'Bearer '+ str(K8S_TOKEN) }
 
 class KubeletCollector(object):
     def collect(self):
@@ -19,17 +21,23 @@ class KubeletCollector(object):
         metric = GaugeMetricFamily(
             'kubernetes_pod_ephemeral_storage_used_bytes',
             'Kubernetes Pod ephemeral storage used in bytes',
-            labels=['pod_node','pod_namespace','pod_name'])
+            labels=['node','namespace','pod'])
         for node in nodes.items:
             node_name = node.metadata.name
-            ip_addresses = [ i for i in node.status.addresses if i.type =='InternalIP' ]
-            ip_address = ip_addresses[0].address
-            response = requests.get(f"https://{ip_address}:10250/stats/summary", headers=AUTH_HEADERS, verify=False)
+            try:
+                response = requests.get(f"https://kubernetes.default.svc/api/v1/nodes/{node_name}/proxy/stats/summary", headers=AUTH_HEADERS, verify=CA_FILE)
+            except:
+                logging.warn(f"Failed to connect to node {node_name}")
+                break
             result = response.json()
             for pod in result['pods']:
                 name = pod['podRef']['name']
                 namespace = pod['podRef']['namespace']
-                used_bytes = pod['ephemeral_storage']['usedBytes']
+                try:
+                    used_bytes = pod['ephemeral_storage']['usedBytes']
+                except:
+                    used_bytes = 0
+                    logging.info(f"Unable to get usedBytes metrics for pod {name} on node {node}, setting to 0")
                 labels=[node_name,namespace,name]
                 metric.add_metric(labels, used_bytes)
         yield metric

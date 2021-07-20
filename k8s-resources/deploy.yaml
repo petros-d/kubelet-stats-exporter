@@ -1,26 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kubelet-exporter
+  name: kubelet-stats-exporter
 spec:
   replicas: 1
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      name: kubelet-exporter
+      name: kubelet-stats-exporter
   template:
     metadata:
       labels:
-        name: kubelet-exporter
+        name: kubelet-stats-exporter
     spec:
       containers:
-      - name: kubelet-exporter
+      - name: kubelet-stats-exporter
         image: python:3.9-slim # Change to your image
         # Dummy command and args for testing 
         command: ['/bin/sh']
         args: ['-c','while true; do echo hello; sleep 60;done']
         ports:
         - containerPort: 9118
+        # Increase these resource values for larger clusters
         resources:
           limits:
             cpu: 50m
@@ -28,4 +29,4 @@ spec:
           requests:
             cpu: 10m
             memory: 50Mi
-      serviceAccountName: kubelet-exporter  
+      serviceAccountName: kubelet-stats-exporter  
