@@ -48,4 +48,5 @@ class KubeletCollector(object):
 if __name__ == "__main__":
     REGISTRY.register(KubeletCollector())
     start_http_server(9118)
-    while True: time.sleep(10)
+    while True: 
+        time.sleep(10)

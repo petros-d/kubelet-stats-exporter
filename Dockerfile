@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY exporter.py .
 
-ENTRYPOINT ['python', /app/exporter.py]
+ENTRYPOINT ["python", "/app/exporter.py"]

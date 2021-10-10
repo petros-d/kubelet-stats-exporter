@@ -15,12 +15,11 @@ spec:
     spec:
       containers:
       - name: kubelet-stats-exporter
-        image: python:3.9-slim # Change to your image
-        # Dummy command and args for testing 
-        command: ['/bin/sh']
-        args: ['-c','while true; do echo hello; sleep 60;done']
+        image: kubelet-stats-exporter:latest # Change to your image
+        # imagePullPolicy: Never
         ports:
-        - containerPort: 9118
+        - name: metrics
+          containerPort: 9118
         # Increase these resource values for larger clusters
         resources:
           limits:

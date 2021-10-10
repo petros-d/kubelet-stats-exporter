@@ -1,0 +1,11 @@
+# HELP kube_pod_ephemeral_storage_used_bytes Kubernetes Pod ephemeral storage used in bytes
+# TYPE kube_pod_ephemeral_storage_used_bytes gauge
+kube_pod_ephemeral_storage_used_bytes{namespace="monitoring",node="docker-desktop",pod="alertmanager-main-2"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="kube-system",node="docker-desktop",pod="vpnkit-controller"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="monitoring",node="docker-desktop",pod="grafana-864f656f6f-8hk6n"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="kube-system",node="docker-desktop",pod="etcd-docker-desktop"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="monitoring",node="docker-desktop",pod="alertmanager-main-1"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="kube-system",node="docker-desktop",pod="kube-scheduler-docker-desktop"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="monitoring",node="docker-desktop",pod="node-exporter-6ntxt"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="monitoring",node="docker-desktop",pod="kube-state-metrics-65769f95d8-6gntr"} 0.0
+kube_pod_ephemeral_storage_used_bytes{namespace="monitoring",node="docker-desktop",pod="prometheus-adapter-5b8db7955f-xs8qx"} 0.0
