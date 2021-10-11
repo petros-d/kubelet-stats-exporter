@@ -5,7 +5,7 @@ from prometheus_client import start_http_server
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 from kubernetes import client, config
 
-logging.basicConfig(format='%(asctime)s -  %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s -  %(levelname)s - %(message)s')
 
 config.load_incluster_config()
 K8S = client.CoreV1Api()
@@ -25,24 +25,27 @@ class KubeletCollector(object):
             labels=['node','namespace','pod'])
         for node in nodes.items:
             node_name = node.metadata.name
-            try:
-                response = requests.get(
-                    f"https://kubernetes.default.svc/api/v1/nodes/{node_name}/proxy/stats/summary",
-                    headers=AUTH_HEADERS, verify=CA_FILE)
-            except:
-                logging.warning(f"Failed to connect to node {node_name}")
-                break
-            result = response.json()
-            for pod in result['pods']:
-                name = pod['podRef']['name']
-                namespace = pod['podRef']['namespace']
+            ready_status = [x for x in node.status.conditions if x.type == 'Ready'] 
+            if len(ready_status) > 0 and ready_status[0].status == 'True':
+                #logging.info(f"node name: {node_name}, status: {ready_status[0].status}")
                 try:
-                    used_bytes = pod['ephemeral_storage']['usedBytes']
+                    response = requests.get(
+                        f"https://kubernetes.default.svc/api/v1/nodes/{node_name}/proxy/stats/summary",
+                        headers=AUTH_HEADERS, verify=CA_FILE)
                 except:
-                    used_bytes = 0
-                    logging.info(f"Unable to get usedBytes metrics for pod {name} on node {node}, setting to 0")
-                labels=[node_name,namespace,name]
-                metric.add_metric(labels, used_bytes)
+                    logging.warning(f"Failed to connect to node {node_name}")
+                    break
+                result = response.json()
+                for pod in result['pods']:
+                    name = pod['podRef']['name']
+                    namespace = pod['podRef']['namespace']
+                    try:
+                        used_bytes = pod['ephemeral-storage']['usedBytes']
+                    except:
+                        used_bytes = 0
+                        logging.info(f"Unable to get usedBytes metrics for pod {name} on node {node_name}, setting to 0")
+                    labels=[node_name,namespace,name]
+                    metric.add_metric(labels, used_bytes)
         yield metric
 
 if __name__ == "__main__":
