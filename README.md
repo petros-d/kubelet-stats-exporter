@@ -13,6 +13,22 @@ https://github.com/kubernetes/kube-state-metrics/issues/1046 (https://github.com
 
 https://github.com/kubernetes/kubernetes/issues/69507
 
+### Configuration
+
+The following environment variables are useful to configure the application:
+
+|Name|Type|Default|Description|
+|--:|--:|--:|--:|
+|EXPORTER_PORT|int|9118|Port exposing prometheus metrics|
+|JSON_LOGGER|bool|true|Application logs on JSON Format for easier centralization using log shippers such as FluentBit|
+|LOG_LEVEL|str|INFO|Logging Level. Werkzeug requests only logged on DEBUG level for log centralization costs saving purposes|
+|SCRAPE_TIMEOUT|float|30.0|Prometheus Scrape timeout in secs|
+
+### Application Endpoints
+
+- `/health` - Application Status for Kubernetes readiness & liveness probes check.
+- `/metrics` - Prometheus metrics endpoint.
+
 ### Deployment
 
 Build the Docker image: `docker build -t kubelet-stats-exporter .`
