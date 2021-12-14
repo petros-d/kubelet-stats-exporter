@@ -2,9 +2,6 @@ FROM python:3.9-slim
 
 ARG UID=1000
 ARG GID=1000
-ARG VERSION
-
-LABEL version=$VERSION
 
 WORKDIR /app
 
