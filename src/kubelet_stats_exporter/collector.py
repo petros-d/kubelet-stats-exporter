@@ -64,7 +64,7 @@ class KubeletCollector():
             if len(ready_status) > 0 and ready_status[0].status == 'True':
                 logger.debug(f"Node name: {node_name}, status: {ready_status[0].status}")
                 node_info = self.get_node_info(node_name)
-                if node_info is not None:
+                if node_info is not None and 'pods' in node_info:
                     for pod in node_info['pods']:
                         name, namespace, used_bytes = get_pod_metrics(pod)
                         labels=[node_name,namespace,name]
@@ -96,6 +96,7 @@ class KubeletCollector():
             response = requests.get(
                 f"https://kubernetes.default.svc/api/v1/nodes/{node_name}/proxy/stats/summary",
                 headers=self.auth_headers, verify=self.ca_file, timeout=self.timeout)
+            logger.debug("Response received from kubernetes API")
         except Exception as err:
             logger.warning(f"Unable to request summary stats from node {node_name} - {err}")
             return None
