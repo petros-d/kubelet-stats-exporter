@@ -1,5 +1,5 @@
 # kubelet-stats-exporter
-This is a Prometheus exporter to expose a Pods epehmeral storage usage stats from the Kubelets
+This is a Prometheus exporter to expose a Pods ephemeral storage usage stats from the Kubelets
 
 The Kubernetes Kubelet has some metrics on ephemeral storage usage that are not currently exposed elsewhere. It may be useful to present these in a format that can be collected by Prometheus. Note the kubelet of Docker Desktop does not expose these metrics, so it is not a useful environment for testing.
 
@@ -25,7 +25,7 @@ The following `pip` libraries are required:
 The following environment variables are useful to configure the application:
 
 |Name|Type|Default|Description|
-|--:|--:|--:|--:|
+|--|--|--|--|
 |EXPORTER_PORT|int|9118|Port exposing prometheus metrics|
 |JSON_LOGGER|bool|true|Application logs on JSON Format for easier centralization using log shippers such as FluentBit|
 |LOG_LEVEL|str|INFO|Logging Level. Werkzeug requests only logged on DEBUG level for log centralization costs saving purposes|
