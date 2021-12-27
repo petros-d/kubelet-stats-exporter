@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: kubelet-stats-exporter
-        image: petrosd/kubelet-stats-exporter:v1.0.0
+        image: petrosd/kubelet-stats-exporter:latest
         # imagePullPolicy: Never
         ports:
         - name: metrics
