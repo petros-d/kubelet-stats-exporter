@@ -20,6 +20,15 @@ spec:
         ports:
         - name: metrics
           containerPort: 9118
+        # env:
+        #   - name: EXPORTER_PORT
+        #     value: "9118"
+        #   - name: JSON_LOGGER
+        #     value: "true"
+        #   - name: LOG_LEVEL
+        #     value: "INFO"
+        #   - name: SCRAPE_TIMEOUT
+        #     value: "30.0"
         # Increase these resource values for larger clusters
         resources:
           limits:

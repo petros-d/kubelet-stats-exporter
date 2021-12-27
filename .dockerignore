@@ -1,0 +1,8 @@
+/extra/*
+/.github/*
+/k8s-resources/*
+/kube-prometheus/*
+Dockerfile
+.DS_Store
+.git
+.gitignore
