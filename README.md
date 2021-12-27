@@ -36,12 +36,6 @@ The following environment variables are useful to configure the application:
 - `/health` - Application Status for Kubernetes readiness & liveness probes check.
 - `/metrics` - Prometheus metrics endpoint.
 
-## Docker Release 
-
-Build the Docker image: `docker build -t $repository/kubelet-stats-exporter .`
-
-Push Docker image to registry: `docker push $repository/kubelet-stats-exporter`
-
 ## Deployment
 ### Kubernetes Manifests
 
